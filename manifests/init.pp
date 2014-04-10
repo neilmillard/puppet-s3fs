@@ -30,18 +30,18 @@ class s3fs ( $s3fs_version = '1.74', $fuse_version = '2.9.3', $tarball_url, $tar
   exec {'extract-fuse':
     cwd     => "${tarball_dir}",
     command => "tar zxf ${fuse_tarball}",
-    creates => "${tarball_dir}/fuse-${s3fs_version}",
+    creates => "${tarball_dir}/fuse-${fuse_version}",
     require => Wget::Fetch['fuse'],
   }
   exec {'configure-fuse':
-    cwd      => "${tarball_dir}/fuse-${s3fs_version}/",
+    cwd      => "${tarball_dir}/fuse-${fuse_version}/",
     provider => 'shell',
     command  => "./configure --prefix=/usr",
     creates  => "${tarball_dir}/fuse-${fuse_version}/Makefile",
     require  => Exec['extract-fuse'],
   }
   exec {'compile-fuse':
-    cwd      => "${tarball_dir}/fuse-${s3fs_version}/",
+    cwd      => "${tarball_dir}/fuse-${fuse_version}/",
     provider => 'shell',
     command  => "make && make install",
     #unless   => "/usr/bin/s3fs --s3fs_version | grep ${s3fs_version}",
