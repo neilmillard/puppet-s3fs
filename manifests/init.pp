@@ -43,7 +43,7 @@ class s3fs ( $s3fs_version = '1.74', $fuse_version = '2.9.3', $tarball_url, $tar
   exec {'compile-fuse':
     cwd      => "${tarball_dir}/fuse-${fuse_version}/",
     provider => 'shell',
-    command  => "make && make install",
+    command  => "make && make install && ldconfig",
     unless   => "/usr/bin/fusermount -V | grep ${fuse_version}",
     require  => Exec['configure-fuse'],
   }
