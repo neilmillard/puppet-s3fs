@@ -7,12 +7,13 @@ define s3fs::config( $bucket, $mountpoint, $options = 'allow_other' ) {
   }
 
   mount {"s3mount-$name":
-    ensure => mounted,
-    device => "s3fs#$bucket",
-    name => "$mountpoint",
-    fstype => 'fuse',
-    options => $options,
-    require => [ Class['s3fs'], File["$mountpoint"], ],
+    ensure   => mounted,
+    device   => "s3fs#$bucket",
+    name     => "$mountpoint",
+    fstype   => 'fuse',
+    options  => $options,
+    remounts => false,
+    require  => [ Class['s3fs'], File["$mountpoint"], ],
   }
 
 }
