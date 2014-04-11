@@ -14,7 +14,7 @@ class s3fs ( $s3fs_version = '1.74', $fuse_version = '2.9.3', $tarball_url, $tar
             'mailcap',
             ]:
     ensure => installed,
-    before => Exec['configure-s3fs'],
+    before => [ Exec['configure-s3fs'], Exec['configure-fuse'], ],
   }
 
   $s3fs_tarball = "s3fs-${s3fs_version}.tar.gz"
@@ -60,11 +60,12 @@ class s3fs ( $s3fs_version = '1.74', $fuse_version = '2.9.3', $tarball_url, $tar
     require => Wget::Fetch['s3fs'],
   }
   exec {'configure-s3fs':
-    cwd      => "${tarball_dir}/s3fs-${s3fs_version}/",
-    provider => 'shell',
-    command  => "./configure --prefix=/usr",
-    creates  => "${tarball_dir}/s3fs-${s3fs_version}/Makefile",
-    require  => Exec['extract-s3fs'],
+    cwd         => "${tarball_dir}/s3fs-${s3fs_version}/",
+    provider    => 'shell',
+    environment => "PKG_CONFIG_PATH=/usr/lib/pkgconfig:/usr/lib64/pkgconfig/",
+    command     => "./configure --prefix=/usr",
+    creates     => "${tarball_dir}/s3fs-${s3fs_version}/Makefile",
+    require     => [ Exec['extract-s3fs'], Exec['compile-fuse'], ],
   }
   exec {'compile-s3fs':
     cwd      => "${tarball_dir}/s3fs-${s3fs_version}/",
