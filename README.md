@@ -11,7 +11,7 @@ This module installs S3FS and FUSE from source tarballs. Note this is only teste
 ```
   class { 's3fs':
     tarball_url  => 'http://mydomain.com/s3fs/',
-    s3fs_version => '1.74',
+    s3fs_version => '1.78',
     fuse_version => '2.9.3',
   }
   ->
