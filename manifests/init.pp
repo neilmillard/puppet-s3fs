@@ -1,4 +1,4 @@
-class s3fs ( $s3fs_version = '1.74', $fuse_version = '2.9.3', $tarball_url, $tarball_dir = '/usr/local/src' ) {
+class s3fs ( $s3fs_version = '1.78', $fuse_version = '2.9.3', $tarball_url, $tarball_dir = '/usr/local/src' ) {
 
   Exec {
     path => '/usr/bin/:/bin:/usr/sbin:/sbin',
@@ -59,13 +59,20 @@ class s3fs ( $s3fs_version = '1.74', $fuse_version = '2.9.3', $tarball_url, $tar
     creates => "${tarball_dir}/s3fs-${s3fs_version}",
     require => Wget::Fetch['s3fs'],
   }
+  exec {'autogen-configure-s3fs':
+    cwd         => "${tarball_dir}/s3fs-${s3fs_version}/",
+    provider    => 'shell',
+    command     => "./autogen.sh",
+    creates     => "${tarball_dir}/s3fs-${s3fs_version}/configure",
+    require     => [ Exec['extract-s3fs'], Exec['compile-fuse'], ],
+  }
   exec {'configure-s3fs':
     cwd         => "${tarball_dir}/s3fs-${s3fs_version}/",
     provider    => 'shell',
     environment => "PKG_CONFIG_PATH=/usr/lib/pkgconfig:/usr/lib64/pkgconfig/",
     command     => "./configure --prefix=/usr",
     creates     => "${tarball_dir}/s3fs-${s3fs_version}/Makefile",
-    require     => [ Exec['extract-s3fs'], Exec['compile-fuse'], ],
+    require     => [ Exec['extract-s3fs'], Exec['compile-fuse'], Exec['autogen-configure-s3fs'], ],
   }
   exec {'compile-s3fs':
     cwd      => "${tarball_dir}/s3fs-${s3fs_version}/",
