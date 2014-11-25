@@ -22,7 +22,7 @@ class s3fs ( $s3fs_version = '1.78', $fuse_version = '2.9.3', $tarball_url, $tar
 
   include wget
 
-  # Install a new version of Fuse
+  #Install a new version of Fuse
   wget::fetch { 'fuse':
     source      => "${tarball_url}/${fuse_tarball}",
     destination => "${tarball_dir}/${fuse_tarball}",
@@ -48,7 +48,7 @@ class s3fs ( $s3fs_version = '1.78', $fuse_version = '2.9.3', $tarball_url, $tar
     require  => Exec['configure-fuse'],
   }
 
-  # Install S3FS
+  #Install S3FS
   wget::fetch { 's3fs':
     source      => "${tarball_url}/${s3fs_tarball}",
     destination => "${tarball_dir}/${s3fs_tarball}",
