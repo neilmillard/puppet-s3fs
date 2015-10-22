@@ -1,4 +1,10 @@
-class s3fs ( $s3fs_version = '1.78', $fuse_version = '2.9.3', $tarball_url, $tarball_dir = '/usr/local/src' ) {
+class s3fs ( $s3fs_version = '1.79',
+            $fuse_version = '2.9.3',
+            $tarball_url,
+            $tarball_dir = '/usr/local/src',
+            $s3fs_tarball = "s3fs-${s3fs_version}.tar.gz",
+            $fuse_tarball = "fuse-${fuse_version}.tar.gz"
+) {
 
   Exec {
     path => '/usr/bin/:/bin:/usr/sbin:/sbin',
@@ -16,9 +22,6 @@ class s3fs ( $s3fs_version = '1.78', $fuse_version = '2.9.3', $tarball_url, $tar
     ensure => installed,
     before => [ Exec['configure-s3fs'], Exec['configure-fuse'], ],
   }
-
-  $s3fs_tarball = "s3fs-${s3fs_version}.tar.gz"
-  $fuse_tarball = "fuse-${fuse_version}.tar.gz"
 
   include wget
 
