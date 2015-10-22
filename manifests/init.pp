@@ -1,5 +1,5 @@
 class s3fs ( $s3fs_version = '1.79',
-            $fuse_version = '2.9.3',
+            $fuse_version = '2.9.4',
             $tarball_url,
             $tarball_dir = '/usr/local/src',
             $s3fs_tarball = "s3fs-${s3fs_version}.tar.gz",
@@ -27,7 +27,7 @@ class s3fs ( $s3fs_version = '1.79',
 
   #Install a new version of Fuse
   wget::fetch { 'fuse':
-    source      => "${tarball_url}/${fuse_tarball}",
+    source      => "${tarball_url}${fuse_tarball}",
     destination => "${tarball_dir}/${fuse_tarball}",
   }
   exec {'extract-fuse':
