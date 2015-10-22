@@ -1,5 +1,5 @@
 name 'puppet-s3fs'
-version '0.0.4'
+version '0.0.6'
 source 'git@github.com:neilmillard/puppet-s3fs.git'
 author 'Cake Team'
 license 'MIT License'
